@@ -28,6 +28,8 @@ Vagrant.configure("2") do |config|
 
   # Shell provisioning to update the system and install Node.js
   config.vm.provision "shell", inline: <<-SHELL
+    echo "Updating archlinux-keyring to prevent signature issues..."
+    pacman -Sy --noconfirm archlinux-keyring
     echo "Updating system packages and installing Node.js..."
     pacman -Syu --noconfirm nodejs
     echo "Node.js installed successfully!"
