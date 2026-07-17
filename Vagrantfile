@@ -7,8 +7,12 @@ Vagrant.configure("2") do |config|
   config.vm.box = "generic/arch"
 
   # Configure the VM network as a Bridged Adapter (known as "public_network" in Vagrant)
-  # This allows the VM to connect directly to your physical local area network (LAN).
-  config.vm.network "public_network"
+  # We specify your active interface wlp1s0 first to avoid interactive prompts on boot.
+  config.vm.network "public_network", bridge: [
+    "wlp1s0",
+    "enp3s0",
+    "eth0"
+  ]
 
   # Provider configuration (interpreting "cbox" as "vbox" / VirtualBox)
   config.vm.provider "virtualbox" do |vb|
