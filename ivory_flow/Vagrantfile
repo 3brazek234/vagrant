@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below.
+Vagrant.configure("2") do |config|
+  # Every Vagrant development environment requires a box.
+  config.vm.box = "centos/7"
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  config.vm.network "private_network", ip: "192.168.56.22"
+
+  # Create a public network (Bridged Adapter).
+  # We specify your active interface wlp1s0 first to avoid interactive prompts on boot.
+  config.vm.network "public_network", bridge: [
+    "wlp1s0",
+    "enp3s0",
+    "eth0"
+  ]
+
+  # Provider-specific configuration for VirtualBox
+  config.vm.provider "virtualbox" do |vb|
+    # Disable VirtualBox GUI mode when booting the machine
+    vb.gui = false
+
+    # Customize the amount of memory on the VM (1GB)
+    vb.memory = "1024"
+  end
+end
