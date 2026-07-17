@@ -25,4 +25,11 @@ Vagrant.configure("2") do |config|
     # Allocate 2GB of memory (2048 MB)
     vb.memory = "2048"
   end
+
+  # Shell provisioning to update the system and install Node.js
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "Updating system packages and installing Node.js..."
+    pacman -Syu --noconfirm nodejs
+    echo "Node.js installed successfully!"
+  SHELL
 end
