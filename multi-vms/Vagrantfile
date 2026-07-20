@@ -1,0 +1,34 @@
+Vagrant.configure("2") do |config|
+
+  config.vm.define "redis" do |redis|
+    redis.vm.box = "centos/7"
+    redis.vm.network "private_network", ip: "192.168.56.10"
+    redis.vm.provision "shell", inline: "echo 'Installing and starting Redis...'"
+  end
+
+  config.vm.define "postgres" do |db|
+    db.vm.box = "centos/7"
+    db.vm.network "private_network", ip: "192.168.56.20"
+    db.vm.provision "shell", inline: "echo 'Installing and starting PostgreSQL...'"
+  end
+
+  config.vm.define "app" do |app|
+    app.vm.box = "centos/7"
+    app.vm.network "private_network", ip: "192.168.56.30"
+    
+    app.vm.provision "shell", inline: <<-SHELL
+      echo "Waiting for Redis (port 6379)..."
+      while ! nc -z 192.168.56.10 6379; do   
+        sleep 1 
+      done
+      echo "Redis is ready!"
+
+      echo "Waiting for PostgreSQL (port 5432)..."
+      while ! nc -z 192.168.56.20 5432; do   
+        sleep 1 
+      done
+      echo "PostgreSQL is ready!"
+    SHELL
+  end
+
+end
